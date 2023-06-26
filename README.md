@@ -1,5 +1,6 @@
 # ThreadsWithGPU
 **Carregar arquivos texto** (use múltiplas threads para IO_Bound)
+
 **Operações matemáticas:** (use múltiplas threads para CPU_Bound)
 - Matriz ordenada por linha
 - Matriz ordenada por coluna
@@ -14,7 +15,9 @@
 Requisitos
 
 Criar estratégia de otimização de IO (variar no de threads de IO)
+
 Criar estratégia de otimização de CPU (variar no de threads de CPU)
+
 Espera-se:
 - Interface definindo o diretório de entrada, número de threads e etc (20%)
 - Separação das threads (IO_Bound(R/W) das de CPU_Bound) (10%)
