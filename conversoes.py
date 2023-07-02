@@ -6,22 +6,55 @@
 import h5py
 import time
 import multiprocessing as mp
+import numpy as np
 # leitura do arquivo txt
 
 # Funções para conversão de um único arquivo (txt ou hdf5)
 def txtToHdf5(arquivo_txt, arquivo_hdf5):
     with open('Arquivos_Entrada/' + str(arquivo_txt), 'r') as arquivo_txt:
-        # Lê o conteúdo do arquivo de texto
-        conteudo = arquivo_txt.read()
+        # Lê as linhas do arquivo de texto
+        linhas = arquivo_txt.readlines()
+
+    # Converte as linhas para uma matriz NumPy
+    matriz = np.array([linha.split() for linha in linhas])
 
     # Cria um arquivo HDF5
     saida_hdf5 = h5py.File("Arquivos_h5/" + str(arquivo_hdf5), 'w')
 
+    # Converte a matriz para uma lista
+    matriz_lista = matriz.tolist()
+
     # Cria um conjunto de dados no arquivo HDF5
-    dataset = saida_hdf5.create_dataset('dados', data=conteudo)
+    dataset = saida_hdf5.create_dataset('dados', data=matriz_lista)
 
     # Fecha o arquivo HDF5
     saida_hdf5.close()
+
+import h5py
+
+# def hdf5ToTxt(arquivo_txt, arquivo_hdf5):
+#     entrada_hdf5 = h5py.File("Arquivos_h5/" + str(arquivo_hdf5), 'r')
+
+#     # Obtém o conjunto de dados do arquivo HDF5
+#     dataset = entrada_hdf5['dados']
+
+#     # Obtém a forma da matriz
+#     shape = dataset.shape
+
+#     dataset = str(dataset)
+#     # Abre o arquivo de texto para escrita
+#     with open('Arquivos_Saida/' + str(arquivo_txt), 'w') as saida_txt:
+#         # Percorre as linhas da matriz
+#         for linha in range(shape[0]):
+#             # Percorre os elementos da linha
+#             for elemento in range(shape[1]):
+#                 # Escreve o valor no arquivo de texto
+#                 saida_txt.write(str(dataset[linha, elemento]).replace("' b'", "  ") + " ")
+#             # Quebra de linha entre as linhas da matriz
+#             saida_txt.write("\n")
+
+#     # Fecha o arquivo HDF5
+#     entrada_hdf5.close()
 
 def hdf5ToTxt(arquivo_txt, arquivo_hdf5):
     entrada_hdf5 = h5py.File("Arquivos_h5/" + str(arquivo_hdf5), 'r')
@@ -84,37 +117,30 @@ def multicore(func):
 
 if __name__ == '__main__':
     # Exemplo de uso
-    # arquivo_txt = '1.txt'
-    # arquivo_hdf5 = '1.h5'
-    # # txtToHdf5(arquivo_txt, arquivo_hdf5)
-    # hdf5ToTxt(arquivo_txt, arquivo_hdf5)
+    arquivo_txt = '1.txt'
+    arquivo_hdf5 = '1.h5'
+    # txtToHdf5(arquivo_txt, arquivo_hdf5)
+    hdf5ToTxt(arquivo_txt, arquivo_hdf5)
 
-    print('Singlecore: ')
-    t1 = time.time()
-    txtToHdf5Loop(1, 100)
-    t2 = time.time()
-    print('Tempo de conversão de txt para hdf5: ', t2-t1)
-    t3 = time.time()
-    hdf5ToTxtLoop(1, 100)
-    t4 = time.time()
-    print('Tempo de conversão de hdf5 para txt: ', t4-t3)
-    print('----------------------------------------------------')
-    print('Tempo total de conversão singleThread: ', t4-t1)
-    print('\n----------------------------------------------------\n')
+    # print('Singlecore: ')
+    # t1 = time.time()
+    # txtToHdf5Loop(1, 100)
+    # t2 = time.time()
+    # print('Tempo de conversão de txt para hdf5: ', t2-t1)
+    # t3 = time.time()
+    # hdf5ToTxtLoop(1, 100)
+    # t4 = time.time()
+    # print('Tempo de conversão de hdf5 para txt: ', t4-t3)
+    # print('----------------------------------------------------')
+    # print('Tempo total de conversão singleThread: ', t4-t1)
+    # print('\n----------------------------------------------------\n')
 
-    print('Multicore: ')
-    tmp = multicore(1)
+    # print('Multicore: ')
+    # tmp = multicore(1)
     
-    print('Tempo de conversão de txt para hdf5: ', tmp)
-    tmp1 = multicore(2)
-    print('Tempo de conversão de hdf5 para txt: ', tmp1)
-    print('----------------------------------------------------')
-    print('Tempo total de conversão multiThread: ', tmp + tmp1)
-    print('----------------------------------------------------')
-
-
-
-
-
-    
-
+    # print('Tempo de conversão de txt para hdf5: ', tmp)
+    # tmp1 = multicore(2)
+    # print('Tempo de conversão de hdf5 para txt: ', tmp1)
+    # print('----------------------------------------------------')
+    # print('Tempo total de conversão multiThread: ', tmp + tmp1)
+    # print('----------------------------------------------------')

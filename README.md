@@ -12,11 +12,11 @@
 - Menores de cada linha
 - Menores de cada coluna
 
-Requisitos
+## Requisitos
 
-Criar estratégia de otimização de IO (variar no de threads de IO)
+**Criar estratégia de otimização de IO** (variar nº de threads de IO)
 
-Criar estratégia de otimização de CPU (variar no de threads de CPU)
+**Criar estratégia de otimização de CPU** (variar nº de threads de CPU)
 
 Espera-se:
 - Interface definindo o diretório de entrada, número de threads e etc (20%)
@@ -29,7 +29,7 @@ Espera-se:
 - Gerar bons gráficos dos resultados (15%)
 - Criar relatório, analisar resultados e concluir a respeito da solução proposta (25%)
 
-### Resultados
+## Resultados
 
 **Espera-se como saída:**
 Para cada arquivo de entrada <NÚMERO>.TXT um arquivo <NÚMERO>_OUT.TXT contendo:
