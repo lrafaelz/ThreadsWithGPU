@@ -318,7 +318,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Escolher Diretório IN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>Escolher Diretório IN</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 166, 77); font: 10pt &quot;Consolas&quot;; font-weight: bold;</string>
@@ -337,7 +337,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Escolher Diretório OUT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>Escolher Diretório OUT</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 166, 77); font: 10pt &quot;Consolas&quot;; font-weight: bold;</string>
