@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>619</width>
-    <height>665</height>
+    <height>565</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -222,58 +222,6 @@
     </property>
     <property name="value">
      <number>0</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lvalorDePi">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>540</y>
-      <width>401</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 204, 100), stop:1 rgba(255, 255, 255, 255));</string>
-    </property>
-    <property name="text">
-     <string> Valor de Pi: 3.14159265358979323846</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lPiCalculado">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>590</y>
-      <width>401</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 204, 100), stop:1 rgba(255, 255, 255, 255));</string>
-    </property>
-    <property name="text">
-     <string> Pi calculado:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_error">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>540</y>
-      <width>61</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(230, 153, 255, 255));</string>
-    </property>
-    <property name="text">
-     <string>Erro:
-0%</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_path_file_in">
