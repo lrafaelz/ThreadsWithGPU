@@ -53,3 +53,4 @@ ordenar_e_adicionar_soma_hdf5(arquivo_entrada, arquivo_saida)
 # ordenar_valores_por_linha_otimizado(arquivo_hdf5)
 # t2 = time.time()
 # print('Tempo de execução: ', t2 - t1)
+
