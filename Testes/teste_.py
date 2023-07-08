@@ -5,19 +5,19 @@ min = 1
 max = 11
 tempos = []
 for i in range(min, max):
-    arquivo  = 'Arquivos_Entrada/'+str(i)+'.txt'
-    ini_time = time.time()
-    a        = np.loadtxt(arquivo, dtype=float)
-    ordlin   = np.sort(a, axis=1)
-    ordcol   = np.sort(a, axis=0)
-    somal    = np.sum(a, axis=1)
-    somac    = np.sum(a, axis=0)
-    tot      = np.sum(a)
-    maxl     = np.max(a, axis=1)
-    maxc     = np.max(a, axis=0)
-    minl     = np.min(a, axis=1)
-    minc     = np.min(a, axis=0)
-    end_time = time.time()
+    arquivo = 'Arquivos_Entrada/'+str(i)+'.txt'
+    ini_time= time.time()
+    a       = np.loadtxt(arquivo, dtype=float)
+    ordlin  = np.sort(a, axis=1)
+    ordcol  = np.sort(a, axis=0)
+    somal   = np.sum(a, axis=1)
+    somac   = np.sum(a, axis=0)
+    tot     = np.sum(a)
+    maxl    = np.max(a, axis=1)
+    maxc    = np.max(a, axis=0)
+    minl    = np.min(a, axis=1)
+    minc    = np.min(a, axis=0)
+    end_time= time.time()
     tempos.append(end_time - ini_time)
 print(tempos)
 # tempos2 = []
