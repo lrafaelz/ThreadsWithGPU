@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
         self.label_results.setStyleSheet("font: 16pt \"Consolas\";\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));")
         self.label_results.setObjectName("label_results")
-        self.btnEXE = QtWidgets.QPushButton(self.centralwidget)
+        self.btnEXE = QtWidgets.QPushButton(self.centralwidget, clicked= lambda: self.press_it(""))
         self.btnEXE.setGeometry(QtCore.QRect(240, 290, 131, 51))
         self.btnEXE.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 0, 255), stop:1 rgba(255, 255, 255, 255));\n"
 "font: 14pt \"Consolas\";\n"
@@ -111,13 +111,13 @@ class Ui_MainWindow(object):
         self.label_path_file_out.setStyleSheet("font: 14pt \"Consolas\";\n"
 "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));")
         self.label_path_file_out.setObjectName("label_path_file_out")
-        self.btnPathFileIn = QtWidgets.QPushButton(self.centralwidget)
+        self.btnPathFileIn = QtWidgets.QPushButton(self.centralwidget, clicked= lambda: self.path_file_in())
         self.btnPathFileIn.setGeometry(QtCore.QRect(450, 190, 101, 31))
         self.btnPathFileIn.setStyleSheet("background-color: rgb(255, 166, 77);\n"
 "font: 10pt \"Consolas\";\n"
 "font-weight: bold;")
         self.btnPathFileIn.setObjectName("btnPathFileIn")
-        self.btnPathFileOut = QtWidgets.QPushButton(self.centralwidget)
+        self.btnPathFileOut = QtWidgets.QPushButton(self.centralwidget, clicked= lambda: self.path_file_out())
         self.btnPathFileOut.setGeometry(QtCore.QRect(450, 240, 101, 31))
         self.btnPathFileOut.setStyleSheet("background-color: rgb(255, 166, 77);\n"
 "font: 10pt \"Consolas\";\n"
@@ -155,6 +155,19 @@ class Ui_MainWindow(object):
         self.btnPathFileIn.setText(_translate("MainWindow", "ESCOLHER"))
         self.btnPathFileOut.setToolTip(_translate("MainWindow", "Gráfico de ganho"))
         self.btnPathFileOut.setText(_translate("MainWindow", "ESCOLHER"))
+
+    def press_it(self, pressed):
+        print('click exe')
+    
+    def path_file_in(self):
+        folder_path = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Folder")
+        print(folder_path)
+        # return folder_path
+    
+    def path_file_out(self):
+        folder_path = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Folder")
+        print(folder_path)
+        # return folder_path
 
 
 if __name__ == "__main__":
