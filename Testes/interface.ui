@@ -24,9 +24,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 16pt &quot;Consolas&quot;;
-text-align: center;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 204, 100), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 16pt &quot;Consolas&quot;; text-align: center; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 204, 100), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string>Manipulação de Matrizes</string>
@@ -45,8 +43,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Número de threads de IO:</string>
@@ -62,8 +59,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Número de threads de CPU:</string>
@@ -123,8 +119,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 16pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 16pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Resultados:</string>
@@ -140,9 +135,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 0, 255), stop:1 rgba(255, 255, 255, 255));
-font: 14pt &quot;Consolas&quot;;
-font-weight: bold;</string>
+     <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 0, 255), stop:1 rgba(255, 255, 255, 255)); font: 14pt &quot;Consolas&quot;; font-weight: bold;</string>
     </property>
     <property name="text">
      <string>EXECUTAR</string>
@@ -158,8 +151,7 @@ font-weight: bold;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Gráfico de operações de IO_BOUND:</string>
@@ -175,8 +167,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Gráfico de operações de CPU_BOUND:</string>
@@ -195,9 +186,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      <string>Gráfico de ganho</string>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 166, 77);
-font: 10pt &quot;Consolas&quot;;
-font-weight: bold;</string>
+     <string notr="true">background-color: rgb(255, 166, 77); font: 10pt &quot;Consolas&quot;; font-weight: bold;</string>
     </property>
     <property name="text">
      <string>VISUALIZAR</string>
@@ -216,9 +205,7 @@ font-weight: bold;</string>
      <string>Gráfico de eficiência por core</string>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 166, 77);
-font: 10pt &quot;Consolas&quot;;
-font-weight: bold;</string>
+     <string notr="true">background-color: rgb(255, 166, 77); font: 10pt &quot;Consolas&quot;; font-weight: bold;</string>
     </property>
     <property name="text">
      <string>VISUALIZAR</string>
@@ -247,8 +234,7 @@ font-weight: bold;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 204, 100), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 204, 100), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Valor de Pi: 3.14159265358979323846</string>
@@ -264,8 +250,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 204, 100), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 255, 204, 100), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Pi calculado:</string>
@@ -281,8 +266,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(230, 153, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(230, 153, 255, 255));</string>
     </property>
     <property name="text">
      <string>Erro:
@@ -302,8 +286,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Diretório de arquivos de entrada:</string>
@@ -319,8 +302,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 14pt &quot;Consolas&quot;;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));</string>
+     <string notr="true">font: 14pt &quot;Consolas&quot;; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));</string>
     </property>
     <property name="text">
      <string> Diretório de arquivos de saída:</string>
@@ -339,9 +321,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Escolher Diretório IN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 166, 77);
-font: 10pt &quot;Consolas&quot;;
-font-weight: bold;</string>
+     <string notr="true">background-color: rgb(255, 166, 77); font: 10pt &quot;Consolas&quot;; font-weight: bold;</string>
     </property>
     <property name="text">
      <string>ESCOLHER</string>
@@ -360,9 +340,7 @@ font-weight: bold;</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Escolher Diretório OUT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 166, 77);
-font: 10pt &quot;Consolas&quot;;
-font-weight: bold;</string>
+     <string notr="true">background-color: rgb(255, 166, 77); font: 10pt &quot;Consolas&quot;; font-weight: bold;</string>
     </property>
     <property name="text">
      <string>ESCOLHER</string>
