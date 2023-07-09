@@ -3,17 +3,18 @@ import time
 
 ini_time_program = time.time()
 min = 1
-max = 11
+max = 4
 tempos_r = []
 tempos_cpu = []
 tempos_w = []
 tempos_tot = []
 for i in range(min, max):
-    arquivo_in = '../Arquivos_Entrada/'+str(i)+'.txt'
-    arquivo_out = '../Arquivos_Saida_/'+str(i)+'_OUT.txt'
+    arquivo_in = 'Arquivos_Entrada/'+str(i)+'.txt'
+    arquivo_out = 'Arquivos_Saida/'+str(i)+'_OUT.txt'
     
     ini_time_r = time.time()
     matriz = np.loadtxt(arquivo_in, dtype=float)
+    print(matriz)
     end_time_r = time.time()
     
     ini_time_cpu = time.time()

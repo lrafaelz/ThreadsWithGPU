@@ -183,7 +183,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Gráfico de ganho</string>
+     <string>Gráfico de operações de IO</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 166, 77); font: 10pt &quot;Consolas&quot;; font-weight: bold;</string>
@@ -202,7 +202,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>Gráfico de eficiência por core</string>
+     <string>Gráfico de operações de CPU</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 166, 77); font: 10pt &quot;Consolas&quot;; font-weight: bold;</string>
@@ -239,6 +239,9 @@
     <property name="text">
      <string> Diretório de arquivos de entrada:</string>
     </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label_path_file_out">
     <property name="geometry">
@@ -254,6 +257,9 @@
     </property>
     <property name="text">
      <string> Diretório de arquivos de saída:</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="btnPathFileIn">
