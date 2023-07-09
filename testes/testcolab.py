@@ -9,7 +9,7 @@ tempos = []
 for i in range(min, max):
     arquivo = str(i)+'.txt'
     start = time.time()
-    a = np.loadtxt('Arquivos_Entrada/'+arquivo, dtype=float)   
+    a = np.loadtxt('/content/drive/MyDrive/SO/SO FINAL/Arquivos_Entrada/'+arquivo, dtype=float)
     # Ordenando cada linha separadamente
     ordlin = np.sort(a, axis=1)
     ordcol = np.sort(a, axis=0)
@@ -28,7 +28,7 @@ tempos2 = []
 for i in range(min, max):
     arquivo = str(i)+'_out.txt'
     start = time.time()
-    with open('OUT/'+ arquivo, 'w') as file:
+    with open('/content/drive/MyDrive/SO/SO FINAL/OUT/'+arquivo, 'w') as file:
         np.savetxt(file, ordlin, fmt='%1.7e')
         np.savetxt(file, ordcol, fmt='%1.7e')
         np.savetxt(file, somal.reshape(1,1000), fmt='%1.7e')

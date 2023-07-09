@@ -9,7 +9,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
+executado = False
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -60,11 +62,11 @@ class Ui_MainWindow(object):
         self.label_graph_cpu.setGeometry(QtCore.QRect(80, 490, 361, 31))
         self.label_graph_cpu.setStyleSheet("font: 14pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));")
         self.label_graph_cpu.setObjectName("label_graph_cpu")
-        self.btnGraphIO = QtWidgets.QPushButton(self.centralwidget)
+        self.btnGraphIO = QtWidgets.QPushButton(self.centralwidget, clicked= lambda: self.show_graph_io())
         self.btnGraphIO.setGeometry(QtCore.QRect(450, 440, 101, 31))
         self.btnGraphIO.setStyleSheet("background-color: rgb(255, 166, 77); font: 10pt \"Consolas\"; font-weight: bold;")
         self.btnGraphIO.setObjectName("btnGraphIO")
-        self.btnGraphCPU = QtWidgets.QPushButton(self.centralwidget)
+        self.btnGraphCPU = QtWidgets.QPushButton(self.centralwidget, clicked= lambda: self.show_graph_cpu())
         self.btnGraphCPU.setGeometry(QtCore.QRect(450, 490, 101, 31))
         self.btnGraphCPU.setStyleSheet("background-color: rgb(255, 166, 77); font: 10pt \"Consolas\"; font-weight: bold;")
         self.btnGraphCPU.setObjectName("btnGraphCPU")
@@ -106,9 +108,9 @@ class Ui_MainWindow(object):
         self.btnEXE.setText(_translate("MainWindow", "EXECUTAR"))
         self.label_graph_io.setText(_translate("MainWindow", " Gráfico de operações de IO_BOUND:"))
         self.label_graph_cpu.setText(_translate("MainWindow", " Gráfico de operações de CPU_BOUND:"))
-        self.btnGraphIO.setToolTip(_translate("MainWindow", "Gráfico de ganho"))
+        self.btnGraphIO.setToolTip(_translate("MainWindow", "Gráfico de operações de IO"))
         self.btnGraphIO.setText(_translate("MainWindow", "VISUALIZAR"))
-        self.btnGraphCPU.setToolTip(_translate("MainWindow", "Gráfico de eficiência por core"))
+        self.btnGraphCPU.setToolTip(_translate("MainWindow", "Gráfico de operações de CPU"))
         self.btnGraphCPU.setText(_translate("MainWindow", "VISUALIZAR"))
         self.label_path_file_in.setText(_translate("MainWindow", " Diretório de arquivos de entrada:"))
         self.label_path_file_out.setText(_translate("MainWindow", " Diretório de arquivos de saída:"))
@@ -119,16 +121,40 @@ class Ui_MainWindow(object):
 
     def press_it(self, pressed):
         print('click exe')
+        global executado
+        executado = True
     
     def path_file_in(self):
-        folder_path = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Folder")
+        folder_path = QFileDialog.getExistingDirectory(None, "Select Folder")
         print(folder_path)
         # return folder_path
     
     def path_file_out(self):
-        folder_path = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Folder")
+        folder_path = QFileDialog.getExistingDirectory(None, "Select Folder")
         print(folder_path)
         # return folder_path
+
+    def msg_warning(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Atenção")
+        msg.setText("O programa deve ser executado primeiro!")
+        msg.setIcon(QMessageBox.Warning)
+        msg.exec_()
+
+    def show_graph_io(self):
+        if (not executado):
+            self.msg_warning()
+        else:
+            # self.lGraficoMedia.setText("lGraficoMedia")
+            print('show graph io')
+    
+    def show_graph_cpu(self):
+        if (not executado):
+            self.msg_warning()
+        else:
+            # self.lGraficoMedia.setText("lGraficoMedia")
+            print('show graph cpu')
+            
 
 
 if __name__ == "__main__":
