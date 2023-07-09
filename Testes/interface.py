@@ -15,6 +15,7 @@ import multiprocessing as mp
 import time
 import os
 import fnmatch
+import matplotlib.pyplot as plt
 
 executado = False
 folder_path_file_in = ''
@@ -22,6 +23,8 @@ folder_path_file_out = ''
 nthreads_io = 0
 nthreads_cpu = 0
 nthreads_local = mp.cpu_count()
+tempos_io = []
+tempos_cpf = []
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -183,14 +186,26 @@ class Ui_MainWindow(object):
         if (not executado):
             self.msg_warning_exe()
         else:
-            self.label_graph_io.setText("label_threads_io")
+            # self.label_graph_io.setText("label_threads_io")
+            global tempos_io
+            qtd_arquivos = qtdArquivos(folder_path_file_in)
+            x_plot = range(1, qtd_arquivos+1)
+            plt.plot(x_plot, tempos_io, label='Tempo Leitura')
+            plt.title('Gráfico de tempo de leitura de cada arquivo')
+            plt.xlabel('arquivos')
+            plt.ylabel('tempo (s)')
+            plt.legend()
+            plt.show()
     
     def show_graph_cpu(self):
         if (not executado):
             self.msg_warning_exe()
         else:
             self.label_graph_cpu.setText("label_threads_cpu")
-            
+
+def qtdArquivos(folder_path_file_in):
+    return len(fnmatch.filter(os.listdir(folder_path_file_in), '*.txt'))
+
 def ler_arquivo_txt(arquivo_txt):
     ini_time = time.time()
     matriz = np.loadtxt(arquivo_txt, dtype=float)
@@ -200,13 +215,14 @@ def ler_arquivo_txt(arquivo_txt):
 
 def arquivos_txt():
     global folder_path_file_in
-    qtd_arquivos = len(fnmatch.filter(os.listdir(folder_path_file_in), '*.txt'))
+    qtd_arquivos = qtdArquivos(folder_path_file_in)
     arquivos_txt = []
     for i in range(1, qtd_arquivos+1):
         arquivos_txt.append(folder_path_file_in + '/' + str(i) + '.txt')
     return arquivos_txt
 
 def readMulticore():
+    global tempos_io
     arquivos = arquivos_txt()
     ini = time.time()
     pool = mp.Pool(mp.cpu_count())
@@ -215,7 +231,8 @@ def readMulticore():
     pool.join()
     end = time.time()
     print(end - ini)
-    for resultado in resultados:
+    for resultado in resultados: # resultado[0] == matrizes, resultado[1] == tempo_leitura
+        tempos_io.append(resultado[1])
         print(resultado[1])
 
 
