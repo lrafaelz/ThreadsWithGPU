@@ -13,11 +13,16 @@ from PyQt5 import QtCore, QtWidgets
 import numpy as np
 import multiprocessing as mp
 import time
+import os
+import fnmatch
+
 
 executado = False
 
 folder_path_file_in = ''
 folder_path_file_out = ''
+nthreads_io = 0
+nthreads_cpu = 0
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -83,10 +88,12 @@ class Ui_MainWindow(object):
         self.label_path_file_in = QtWidgets.QLabel(self.centralwidget)
         self.label_path_file_in.setGeometry(QtCore.QRect(80, 190, 361, 31))
         self.label_path_file_in.setStyleSheet("font: 14pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));")
+        self.label_path_file_in.setWordWrap(True)
         self.label_path_file_in.setObjectName("label_path_file_in")
         self.label_path_file_out = QtWidgets.QLabel(self.centralwidget)
         self.label_path_file_out.setGeometry(QtCore.QRect(80, 240, 361, 31))
         self.label_path_file_out.setStyleSheet("font: 14pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));")
+        self.label_path_file_out.setWordWrap(True)
         self.label_path_file_out.setObjectName("label_path_file_out")
         self.btnPathFileIn = QtWidgets.QPushButton(self.centralwidget, clicked= lambda: self.path_file_in())
         self.btnPathFileIn.setGeometry(QtCore.QRect(450, 190, 101, 31))
@@ -114,9 +121,9 @@ class Ui_MainWindow(object):
         self.btnEXE.setText(_translate("MainWindow", "EXECUTAR"))
         self.label_graph_io.setText(_translate("MainWindow", " Gráfico de operações de IO_BOUND:"))
         self.label_graph_cpu.setText(_translate("MainWindow", " Gráfico de operações de CPU_BOUND:"))
-        self.btnGraphIO.setToolTip(_translate("MainWindow", "Gráfico de ganho"))
+        self.btnGraphIO.setToolTip(_translate("MainWindow", "Gráfico de operações de IO"))
         self.btnGraphIO.setText(_translate("MainWindow", "VISUALIZAR"))
-        self.btnGraphCPU.setToolTip(_translate("MainWindow", "Gráfico de eficiência por core"))
+        self.btnGraphCPU.setToolTip(_translate("MainWindow", "Gráfico de operações de CPU"))
         self.btnGraphCPU.setText(_translate("MainWindow", "VISUALIZAR"))
         self.label_path_file_in.setText(_translate("MainWindow", " Diretório de arquivos de entrada:"))
         self.label_path_file_out.setText(_translate("MainWindow", " Diretório de arquivos de saída:"))
@@ -127,30 +134,34 @@ class Ui_MainWindow(object):
 
     def press_it(self, pressed):
         print('click exe')
+        ini_tempo_exe = time.time()
         global executado
         global folder_path_file_in
         global folder_path_file_out
         if (folder_path_file_in and folder_path_file_out):
-            self.readMulticore()
             print(folder_path_file_in)
             print(folder_path_file_out)
+            readMulticore()
             executado = True
         else:
             self.msg_warning_path();
+        
+        end_tempo_exe = time.time()
+        print(end_tempo_exe - ini_tempo_exe)
     
     def path_file_in(self):
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Folder")
         global folder_path_file_in
         folder_path_file_in = folder_path
-        self.label_path_file_in.setStyleSheet("font: 10pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 255, 255));")
+        self.label_path_file_in.setStyleSheet("font: 10pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));")
         self.label_path_file_in.setText(folder_path)
     
     def path_file_out(self):
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Folder")
         global folder_path_file_out
         folder_path_file_out = folder_path
-        self.label_path_file_out.setStyleSheet("font: 10pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 255, 255));")
-        self.label_path_file_out.setText(folder_path).setWordWrap(True)
+        self.label_path_file_out.setStyleSheet("font: 10pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));")
+        self.label_path_file_out.setText(folder_path)
     
     def msg_warning_path(self):
         msg = QtWidgets.QMessageBox()
@@ -170,38 +181,40 @@ class Ui_MainWindow(object):
         if (not executado):
             self.msg_warning_exe()
         else:
-            self.label_threads_io.setText("label_threads_io")
+            self.label_graph_io.setText("label_threads_io")
     
     def show_graph_cpu(self):
         if (not executado):
             self.msg_warning_exe()
         else:
-            self.label_threads_cpu.setText("label_threads_cpu")
+            self.label_graph_cpu.setText("label_threads_cpu")
             
-    def ler_arquivo_txt(arquivo_txt):
-        ini_time = time.time()
-        matriz = np.loadtxt(arquivo_txt, dtype=float)
-        end_time = time.time()
-        tempo_r = end_time - ini_time
-        return matriz, tempo_r
+def ler_arquivo_txt(arquivo_txt):
+    ini_time = time.time()
+    matriz = np.loadtxt(arquivo_txt, dtype=float)
+    end_time = time.time()
+    tempo_r = end_time - ini_time
+    return matriz, tempo_r
 
-    def arquivos_txt(self):
-        arquivos_txt = []
-        for i in range(1, 11):
-            arquivos_txt.append(self.folder_path_file_in + '/' + str(i) + '.txt')
-        return arquivos_txt
+def arquivos_txt():
+    global folder_path_file_in
+    qtd_arquivos = len(fnmatch.filter(os.listdir(folder_path_file_in), '*.txt'))
+    arquivos_txt = []
+    for i in range(1, qtd_arquivos+1):
+        arquivos_txt.append(folder_path_file_in + '/' + str(i) + '.txt')
+    return arquivos_txt
 
-    def readMulticore(self):
-        arquivos = self.arquivos_txt()
-        ini = time.time()
-        pool = mp.Pool(mp.cpu_count())
-        resultados = pool.map(self.ler_arquivo_txt, arquivos)
-        pool.close()
-        pool.join()
-        end = time.time()
-        print(end - ini)
-        for resultado in resultados:
-            print(resultado[1])
+def readMulticore():
+    arquivos = arquivos_txt()
+    ini = time.time()
+    pool = mp.Pool(mp.cpu_count())
+    resultados = pool.map(ler_arquivo_txt, arquivos)
+    pool.close()
+    pool.join()
+    end = time.time()
+    print(end - ini)
+    for resultado in resultados:
+        print(resultado[1])
 
 
 if __name__ == "__main__":
