@@ -23,6 +23,7 @@ folder_path_file_in = ''
 folder_path_file_out = ''
 nthreads_io = 0
 nthreads_cpu = 0
+nthreads_local = mp.cpu_count()
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -46,7 +47,7 @@ class Ui_MainWindow(object):
         self.sbThreadsCPU = QtWidgets.QSpinBox(self.centralwidget)
         self.sbThreadsCPU.setGeometry(QtCore.QRect(380, 140, 61, 31))
         self.sbThreadsCPU.setStyleSheet("font: 14pt \"Consolas\";")
-        self.sbThreadsCPU.setMinimum(1)
+        self.sbThreadsCPU.setMinimum(n)
         self.sbThreadsCPU.setMaximum(100)
         self.sbThreadsCPU.setSingleStep(1)
         self.sbThreadsCPU.setObjectName("sbThreadsCPU")
