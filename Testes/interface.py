@@ -16,9 +16,7 @@ import time
 import os
 import fnmatch
 
-
 executado = False
-
 folder_path_file_in = ''
 folder_path_file_out = ''
 nthreads_io = 0
@@ -47,14 +45,14 @@ class Ui_MainWindow(object):
         self.sbThreadsCPU = QtWidgets.QSpinBox(self.centralwidget)
         self.sbThreadsCPU.setGeometry(QtCore.QRect(380, 140, 61, 31))
         self.sbThreadsCPU.setStyleSheet("font: 14pt \"Consolas\";")
-        self.sbThreadsCPU.setMinimum(n)
+        self.sbThreadsCPU.setMinimum(nthreads_local)
         self.sbThreadsCPU.setMaximum(100)
         self.sbThreadsCPU.setSingleStep(1)
         self.sbThreadsCPU.setObjectName("sbThreadsCPU")
         self.sbThreadsIO = QtWidgets.QSpinBox(self.centralwidget)
         self.sbThreadsIO.setGeometry(QtCore.QRect(380, 90, 61, 31))
         self.sbThreadsIO.setStyleSheet("font: 14pt \"Consolas\";")
-        self.sbThreadsIO.setMinimum(1)
+        self.sbThreadsIO.setMinimum(nthreads_local)
         self.sbThreadsIO.setMaximum(100)
         self.sbThreadsIO.setSingleStep(1)
         self.sbThreadsIO.setObjectName("sbThreadsIO")
@@ -139,9 +137,12 @@ class Ui_MainWindow(object):
         global executado
         global folder_path_file_in
         global folder_path_file_out
+        global nthreads_io
+        global nthreads_cpu
+        nthreads_io = int(self.sbThreadsIO.text())
+        nthreads_cpu = int(self.sbThreadsCPU.text())
+
         if (folder_path_file_in and folder_path_file_out):
-            print(folder_path_file_in)
-            print(folder_path_file_out)
             readMulticore()
             executado = True
         else:

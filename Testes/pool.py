@@ -1,29 +1,91 @@
-from multiprocessing import Pool
-import time
-import numpy as np
+import sys
+from time import sleep
 
-def process_line(line):
-    return "FOO: %s" % line
+from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal
+from PyQt5.QtWidgets import (
+    QApplication,
+    QLabel,
+    QMainWindow,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 
-if __name__ == "__main__":
-    ini_time_r = time.time()
+# Step 1: Create a worker class
+class Worker(QObject):
+    finished = pyqtSignal()
+    progress = pyqtSignal(int)
 
-    pool = Pool(4)
-    with open('Arquivos_Entrada/1.txt') as source_file:
-        # chunk the work into batches of 4 lines at a time
-        results = pool.map(process_line, source_file, 4)
-    
-    end_time_r = time.time()
+    def run(self):
+        """Long-running task."""
+        for i in range(5):
+            sleep(1)
+            self.progress.emit(i + 1)
+        self.finished.emit()
 
-    print(end_time_r - ini_time_r)
+class Window(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.clicksCount = 0
+        self.setupUi()
 
-    ini_time_r = time.time()
+    def setupUi(self):
+        self.setWindowTitle("Freezing GUI")
+        self.resize(300, 150)
+        self.centralWidget = QWidget()
+        self.setCentralWidget(self.centralWidget)
+        # Create and connect widgets
+        self.clicksLabel = QLabel("Counting: 0 clicks", self)
+        self.clicksLabel.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.stepLabel = QLabel("Long-Running Step: 0")
+        self.stepLabel.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.countBtn = QPushButton("Click me!", self)
+        self.countBtn.clicked.connect(self.countClicks)
+        self.longRunningBtn = QPushButton("Long-Running Task!", self)
+        self.longRunningBtn.clicked.connect(self.runLongTask)
+        # Set the layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.clicksLabel)
+        layout.addWidget(self.countBtn)
+        layout.addStretch()
+        layout.addWidget(self.stepLabel)
+        layout.addWidget(self.longRunningBtn)
+        self.centralWidget.setLayout(layout)
 
-    matriz = np.loadtxt('Arquivos_Entrada/1.txt', dtype=float)
-    
-    end_time_r = time.time()
+    def countClicks(self):
+        self.clicksCount += 1
+        self.clicksLabel.setText(f"Counting: {self.clicksCount} clicks")
 
-    print(end_time_r - ini_time_r)
+    def reportProgress(self, n):
+        self.stepLabel.setText(f"Long-Running Step: {n}")
 
-        
-    # print(results)
+    # Snip...
+    def runLongTask(self):
+        # Step 2: Create a QThread object
+        self.thread = QThread()
+        # Step 3: Create a worker object
+        self.worker = Worker()
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progress.connect(self.reportProgress)
+        # Step 6: Start the thread
+        self.thread.start()
+
+        # Final resets
+        self.longRunningBtn.setEnabled(False)
+        self.thread.finished.connect(
+            lambda: self.longRunningBtn.setEnabled(True)
+        )
+        self.thread.finished.connect(
+            lambda: self.stepLabel.setText("Long-Running Step: 0")
+        )
+
+app = QApplication(sys.argv)
+win = Window()
+win.show()
+sys.exit(app.exec())
