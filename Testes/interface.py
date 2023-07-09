@@ -24,7 +24,7 @@ nthreads_io = 0
 nthreads_cpu = 0
 nthreads_local = mp.cpu_count()
 tempos_io = []
-tempos_cpf = []
+tempos_cpu = []
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -152,7 +152,7 @@ class Ui_MainWindow(object):
             self.msg_warning_path();
         
         end_tempo_exe = time.time()
-        print(end_tempo_exe - ini_tempo_exe)
+        print('Tempo total de execução de software: ',  end_tempo_exe - ini_tempo_exe)
     
     def path_file_in(self):
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Folder")
@@ -190,7 +190,7 @@ class Ui_MainWindow(object):
             global tempos_io
             qtd_arquivos = qtdArquivos(folder_path_file_in)
             x_plot = range(1, qtd_arquivos+1)
-            plt.plot(x_plot, tempos_io, label='Tempo Leitura')
+            plt.plot(x_plot, tempos_io, label='Arquivos')
             plt.title('Gráfico de tempo de leitura de cada arquivo')
             plt.xlabel('arquivos')
             plt.ylabel('tempo (s)')
@@ -221,19 +221,75 @@ def arquivos_txt():
         arquivos_txt.append(folder_path_file_in + '/' + str(i) + '.txt')
     return arquivos_txt
 
+def arquivos_out_txt():
+    global folder_path_file_in
+    global folder_path_file_out
+    qtd_arquivos = qtdArquivos(folder_path_file_in)
+    arquivos_txt = []
+    for i in range(1, qtd_arquivos+1):
+        arquivos_txt.append(folder_path_file_out + '/' + str(i) + '_out.txt')
+    return arquivos_txt
+
+def calculo_matrizes(matrizes):
+    ini_time = time.time()
+    ordlin = np.sort(matrizes, axis=1)
+    ordcol = np.sort(matrizes, axis=0)
+    somal = np.sum(matrizes, axis=1)
+    somac = np.sum(matrizes, axis=0)
+    total = np.sum(matrizes)
+    maxl = np.max(matrizes, axis=1)
+    maxc = np.max(matrizes, axis=0)
+    minl = np.min(matrizes, axis=1)
+    minc = np.min(matrizes, axis=0)
+    end_time = time.time()
+    tempo_c = end_time - ini_time
+
+    return ordlin, ordcol, somal, somac, total, maxl, maxc, minl, minc, tempo_c
+
 def readMulticore():
     global tempos_io
+    global tempos_cpu
+    global nthreads_io
+    global nthreads_cpu
+    matrizes = ordlin = ordcol = somal = somac = total = maxl = maxc = minl = minc = []
     arquivos = arquivos_txt()
-    ini = time.time()
-    pool = mp.Pool(mp.cpu_count())
-    resultados = pool.map(ler_arquivo_txt, arquivos)
-    pool.close()
-    pool.join()
-    end = time.time()
-    print(end - ini)
-    for resultado in resultados: # resultado[0] == matrizes, resultado[1] == tempo_leitura
+    arquivos_out = arquivos_out_txt()
+
+    # begin leitura de arquivos
+    ini_tempo = time.time()
+    pool_r = mp.Pool(nthreads_io)
+    resultados_r = pool_r.map(ler_arquivo_txt, arquivos)
+    pool_r.close()
+    pool_r.join()
+    end_tempo = time.time()
+    print('Tempo total de leitura de arquivos: ',  end_tempo - ini_tempo)
+
+    for resultado in resultados_r: # resultado[0] == matrizes, resultado[1] == tempo_leitura
         tempos_io.append(resultado[1])
-        print(resultado[1])
+        matrizes.append(resultado[0])
+    
+    # begin calculos de matrizes
+    ini_tempo = time.time()
+    pool_c = mp.Pool(nthreads_cpu)
+    resultados_c = pool_c.map(calculo_matrizes, matrizes)
+    pool_c.close()
+    pool_c.join()
+    end_tempo = time.time()
+    print('Tempo total de cálculos de matrizes: ',  end_tempo - ini_tempo)
+
+    # 0 ordlin, 1 ordcol, 2 somal, 3 somac, 4 total, 5 maxl, 6 maxc, 7 minl, 8 minc, 9 tempo_c
+    for resultado in resultados_c:
+        ordlin.append(resultado[0])
+        ordcol.append(resultado[1])
+        somal.append(resultado[2])
+        somac.append(resultado[3])
+        total.append(resultado[4])
+        maxl.append(resultado[5])
+        maxc.append(resultado[6])
+        minl.append(resultado[7])
+        minc.append(resultado[8])
+        tempos_cpu.append(resultado[9])
+
 
 
 if __name__ == "__main__":
