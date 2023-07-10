@@ -201,7 +201,16 @@ class Ui_MainWindow(object):
         if (not executado):
             self.msg_warning_exe()
         else:
-            self.label_graph_cpu.setText("label_threads_cpu")
+            # self.label_graph_cpu.setText("label_threads_cpu")
+            global tempos_cpu
+            qtd_arquivos = qtdArquivos(folder_path_file_in)
+            x_plot = range(1, qtd_arquivos+1)
+            plt.plot(x_plot, tempos_cpu, label='Arquivos')
+            plt.title('Gráfico de tempo de operações de cada arquivo')
+            plt.xlabel('arquivos')
+            plt.ylabel('tempo (s)')
+            plt.legend()
+            plt.show()
 
 def qtdArquivos(folder_path_file_in):
     return len(fnmatch.filter(os.listdir(folder_path_file_in), '*.txt'))
@@ -244,6 +253,14 @@ def calculo_matrizes(matrizes):
     end_time = time.time()
     tempo_c = end_time - ini_time
 
+    somal = np.reshape(somal, (1, 1000))
+    somac = np.reshape(somac, (1, 1000))
+    total = np.reshape(total, (1, 1))
+    maxl = np.reshape(maxl, (1, 1000))
+    maxc = np.reshape(maxc, (1, 1000))
+    minl = np.reshape(minl, (1, 1000))
+    minc = np.reshape(minc, (1, 1000))
+    
     return ordlin, ordcol, somal, somac, total, maxl, maxc, minl, minc, tempo_c
 
 def readMulticore():
@@ -251,6 +268,8 @@ def readMulticore():
     global tempos_cpu
     global nthreads_io
     global nthreads_cpu
+    global folder_path_file_in
+    qtd_arquivos = qtdArquivos(folder_path_file_in)
     matrizes = ordlin = ordcol = somal = somac = total = maxl = maxc = minl = minc = []
     arquivos = arquivos_txt()
     arquivos_out = arquivos_out_txt()
@@ -281,14 +300,30 @@ def readMulticore():
     for resultado in resultados_c:
         ordlin.append(resultado[0])
         ordcol.append(resultado[1])
-        somal.append(resultado[2])
-        somac.append(resultado[3])
-        total.append(resultado[4])
-        maxl.append(resultado[5])
-        maxc.append(resultado[6])
-        minl.append(resultado[7])
-        minc.append(resultado[8])
+        somal.append(resultado[2][0])
+        somac.append(resultado[3][0])
+        total.append(resultado[4][0][0])
+        maxl.append(resultado[5][0])
+        maxc.append(resultado[6][0])
+        minl.append(resultado[7][0])
+        minc.append(resultado[8][0])
         tempos_cpu.append(resultado[9])
+
+    # begin escrita de arquivos
+    ini_tempo = time.time()
+    # for i in range(1, qtd_arquivos+1):
+    #     with open(arquivos_out[i], 'w') as file:
+    #         np.savetxt(file, ordlin[i], fmt='%1.7e')
+    #         np.savetxt(file, ordcol[i], fmt='%1.7e')
+    #         np.savetxt(file, somal[i], fmt='%1.7e')
+    #         np.savetxt(file, somac[i], fmt='%1.7e')
+    #         np.savetxt(file, total[i], fmt='%1.7e')
+    #         np.savetxt(file, maxl[i], fmt='%1.7e')
+    #         np.savetxt(file, maxc[i], fmt='%1.7e')
+    #         np.savetxt(file, minl[i], fmt='%1.7e')
+    #         np.savetxt(file, minc[i], fmt='%1.7e')
+    end_tempo = time.time()
+    print('Tempo total de escrita de arquivos: ',  end_tempo - ini_tempo)
 
 
 
