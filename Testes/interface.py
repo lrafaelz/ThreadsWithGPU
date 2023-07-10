@@ -230,15 +230,6 @@ def arquivos_txt():
         arquivos_txt.append(folder_path_file_in + '/' + str(i) + '.txt')
     return arquivos_txt
 
-def arquivos_out_txt():
-    global folder_path_file_in
-    global folder_path_file_out
-    qtd_arquivos = qtdArquivos(folder_path_file_in)
-    arquivos_txt = []
-    for i in range(1, qtd_arquivos+1):
-        arquivos_txt.append(folder_path_file_out + '/' + str(i) + '_out.txt')
-    return arquivos_txt
-
 def calculo_matrizes(matrizes):
     ini_time = time.time()
     ordlin = np.sort(matrizes, axis=1)
@@ -288,7 +279,6 @@ def readMulticore():
     qtd_arquivos = qtdArquivos(folder_path_file_in)
     matrizes = ordlin = ordcol = somal = somac = total = maxl = maxc = minl = minc = []
     arquivos = arquivos_txt()
-    arquivos_out = arquivos_out_txt()
 
     # begin leitura de arquivos
     ini_tempo = time.time()
@@ -340,7 +330,7 @@ def readMulticore():
     
     pool_w.close()
     pool_w.join()
-    
+
     end_tempo = time.time()
     print('Tempo total de escrita de arquivos: ',  end_tempo - ini_tempo)
 
