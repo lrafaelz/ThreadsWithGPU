@@ -263,6 +263,22 @@ def calculo_matrizes(matrizes):
     
     return ordlin, ordcol, somal, somac, total, maxl, maxc, minl, minc, tempo_c
 
+def writeMulticore(i, ordlin, ordcol, somal, somac, 
+            total, maxl, maxc, minl, minc):
+    global folder_path_file_out
+    arquivos_out = folder_path_file_out + '/' + str(i) + '_out.txt'
+
+    with open(arquivos_out, 'w') as file:
+        np.savetxt(file, ordlin[i], fmt='%1.7e')
+        np.savetxt(file, ordcol[i], fmt='%1.7e')
+        np.savetxt(file, somal[i], fmt='%1.7e')
+        np.savetxt(file, somac[i], fmt='%1.7e')
+        np.savetxt(file, total[i], fmt='%1.7e')
+        np.savetxt(file, maxl[i], fmt='%1.7e')
+        np.savetxt(file, maxc[i], fmt='%1.7e')
+        np.savetxt(file, minl[i], fmt='%1.7e')
+        np.savetxt(file, minc[i], fmt='%1.7e')
+
 def readMulticore():
     global tempos_io
     global tempos_cpu
@@ -311,17 +327,20 @@ def readMulticore():
 
     # begin escrita de arquivos
     ini_tempo = time.time()
-    # for i in range(1, qtd_arquivos+1):
-    #     with open(arquivos_out[i], 'w') as file:
-    #         np.savetxt(file, ordlin[i], fmt='%1.7e')
-    #         np.savetxt(file, ordcol[i], fmt='%1.7e')
-    #         np.savetxt(file, somal[i], fmt='%1.7e')
-    #         np.savetxt(file, somac[i], fmt='%1.7e')
-    #         np.savetxt(file, total[i], fmt='%1.7e')
-    #         np.savetxt(file, maxl[i], fmt='%1.7e')
-    #         np.savetxt(file, maxc[i], fmt='%1.7e')
-    #         np.savetxt(file, minl[i], fmt='%1.7e')
-    #         np.savetxt(file, minc[i], fmt='%1.7e')
+    pool_w = mp.Pool(nthreads_io)
+    jobs = []
+    for i in range(qtd_arquivos):
+        job = pool_w.apply_async(writeMulticore, (i, 
+            ordlin, ordcol, somal, somac, 
+            total, maxl, maxc, minl, minc))
+        jobs.append(job)
+
+    for job in jobs:
+        job.get()
+    
+    pool_w.close()
+    pool_w.join()
+    
     end_tempo = time.time()
     print('Tempo total de escrita de arquivos: ',  end_tempo - ini_tempo)
 
