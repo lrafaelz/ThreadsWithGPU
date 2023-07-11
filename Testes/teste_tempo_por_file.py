@@ -46,6 +46,7 @@ for i in range(min, max):
     tempos_cpu.append(end_time_cpu - ini_time_cpu)
     tempos_w.append(end_time_w - ini_time_w)
     tempos_tot.append(end_time_w - ini_time_r)
+    print(end_time_w - ini_time_w)
 
 print(tempos_r)
 print(tempos_cpu)

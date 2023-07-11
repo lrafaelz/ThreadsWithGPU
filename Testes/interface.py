@@ -256,7 +256,7 @@ def calculo_matrizes(matrizes):
     
     return ordlin, ordcol, somal, somac, total, maxl, maxc, minl, minc, tempo_c
 
-def writeMulticore(lock, i, resultados):
+def writeMulticore(i, resultados, queue):
     global folder_path_file_in
     global folder_path_file_out
     print(folder_path_file_in)
@@ -264,12 +264,11 @@ def writeMulticore(lock, i, resultados):
     arquivos_out = folder_path_file_out + '/' + str(i+1) + '_out.txt'
     print(arquivos_out)
 
-    with lock:
         # print(resultados[0][i])
         # print(resultados[1][i])
         # print(resultados[2][0][i])
         # print(resultados[3][0][i])
-        print(resultados[4][0][0][i])
+        # print(resultados[4][0][0][i])
         # print(resultados[5][0][i])
         # print(resultados[6][0][i])
         # print(resultados[7][0][i])
@@ -284,6 +283,8 @@ def writeMulticore(lock, i, resultados):
         #     np.savetxt(file, resultados[6][0][i], fmt='%1.7e')      # maxc
         #     np.savetxt(file, resultados[7][0][i], fmt='%1.7e')      # minl
         #     np.savetxt(file, resultados[8][0][i], fmt='%1.7e')      # minc
+    queue.put(resultados[4][0][0][i])
+    
 
 def readMulticore():
     global tempos_io
@@ -292,7 +293,6 @@ def readMulticore():
     global nthreads_cpu
     global folder_path_file_in
     global folder_path_file_out
-    print(folder_path_file_out)
     qtd_arquivos = qtdArquivos(folder_path_file_in)
     matrizes = ordlin = ordcol = somal = somac = total = maxl = maxc = minl = minc = []
     arquivos = arquivos_txt()
@@ -334,12 +334,16 @@ def readMulticore():
 
     # begin escrita de arquivos
     ini_tempo = time.time()
-    lock = mp.Lock()
-    processes_w = [mp.Process(target=writeMulticore, args=(lock, i, resultados_c)) for i in range(qtd_arquivos)]
-    for process in processes_w: # começa os processos
+    queue = mp.Queue()
+    processes = [mp.Process(target=writeMulticore, args=(i, resultados_c, queue)) for i in range(qtd_arquivos)]
+    for process in processes:
         process.start()
-    for process in processes_w: # espera finalização dos processos
+    for process in processes:
         process.join()
+    results = [queue.get() for _ in range(qtd_arquivos)]
+    results.sort(key=lambda value: value[1])
+    for result in results:
+        print(f'> {result}')
     end_tempo = time.time()
     print('Tempo total de escrita de arquivos: ',  end_tempo - ini_tempo)
 
