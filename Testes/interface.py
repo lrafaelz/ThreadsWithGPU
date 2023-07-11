@@ -196,6 +196,7 @@ class Ui_MainWindow(object):
             x_plot = range(1, qtd_arquivos+1)
             plt.plot(x_plot, tempos_i, label='Leitura')
             plt.plot(x_plot, tempos_o, label='Escrita')
+            plt.plot(x_plot, mediaTempoS(tempos_i, tempos_o), label='Tempo médio L/E')
             plt.title('Gráfico de tempo de leitura de cada arquivo')
             plt.xlabel('arquivos')
             plt.ylabel('tempo (s)')
@@ -211,6 +212,7 @@ class Ui_MainWindow(object):
             qtd_arquivos = qtdArquivos(folder_path_file_in)
             x_plot = range(1, qtd_arquivos+1)
             plt.plot(x_plot, tempos_cpu, label='Cálculos')
+            plt.plot(x_plot, mediaTempo(tempos_cpu), label='Tempo médio')
             plt.title('Gráfico de tempo de operações de cada arquivo')
             plt.xlabel('arquivos')
             plt.ylabel('tempo (s)')
@@ -219,6 +221,21 @@ class Ui_MainWindow(object):
 
 def qtdArquivos(folder_path_file_in):
     return len(fnmatch.filter(os.listdir(folder_path_file_in), '*.txt'))
+
+def mediaTempo(times):
+    media = np.average(times)
+    tempos = []
+    for t in times:
+        tempos.append(media)
+    return tempos
+
+def mediaTempoS(timesI, timesO):
+    mediaI = np.average(timesI)
+    mediaO = np.average(timesO)
+    tempos = []
+    for t in timesI:
+        tempos.append(mediaI+mediaO)
+    return tempos
 
 def ler_arquivo_txt(arquivo_txt):
     ini_time = time.time()
