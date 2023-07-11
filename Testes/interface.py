@@ -16,6 +16,7 @@ import time
 import os
 import fnmatch
 import matplotlib.pyplot as plt
+from functools import partial
 
 executado = False
 folder_path_file_in = ''
@@ -83,10 +84,10 @@ class Ui_MainWindow(object):
         self.btnGraphCPU.setGeometry(QtCore.QRect(450, 490, 101, 31))
         self.btnGraphCPU.setStyleSheet("background-color: rgb(255, 166, 77); font: 10pt \"Consolas\"; font-weight: bold;")
         self.btnGraphCPU.setObjectName("btnGraphCPU")
-        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(60, 360, 501, 16))
-        self.progressBar.setProperty("value", 0)
-        self.progressBar.setObjectName("progressBar")
+        # self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
+        # self.progressBar.setGeometry(QtCore.QRect(60, 360, 501, 16))
+        # self.progressBar.setProperty("value", 0)
+        # self.progressBar.setObjectName("progressBar")
         self.label_path_file_in = QtWidgets.QLabel(self.centralwidget)
         self.label_path_file_in.setGeometry(QtCore.QRect(80, 190, 361, 31))
         self.label_path_file_in.setStyleSheet("font: 14pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));")
@@ -165,6 +166,7 @@ class Ui_MainWindow(object):
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(None, "Select Folder")
         global folder_path_file_out
         folder_path_file_out = folder_path
+        print(folder_path_file_out)
         self.label_path_file_out.setStyleSheet("font: 10pt \"Consolas\"; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 204, 255, 100), stop:1 rgba(255, 255, 255, 255));")
         self.label_path_file_out.setText(folder_path)
     
@@ -254,21 +256,34 @@ def calculo_matrizes(matrizes):
     
     return ordlin, ordcol, somal, somac, total, maxl, maxc, minl, minc, tempo_c
 
-def writeMulticore(i, ordlin, ordcol, somal, somac, 
-            total, maxl, maxc, minl, minc):
+def writeMulticore(lock, i, resultados):
+    global folder_path_file_in
     global folder_path_file_out
-    arquivos_out = folder_path_file_out + '/' + str(i) + '_out.txt'
+    print(folder_path_file_in)
+    print(folder_path_file_out)
+    arquivos_out = folder_path_file_out + '/' + str(i+1) + '_out.txt'
+    print(arquivos_out)
 
-    with open(arquivos_out, 'w') as file:
-        np.savetxt(file, ordlin[i], fmt='%1.7e')
-        np.savetxt(file, ordcol[i], fmt='%1.7e')
-        np.savetxt(file, somal[i], fmt='%1.7e')
-        np.savetxt(file, somac[i], fmt='%1.7e')
-        np.savetxt(file, total[i], fmt='%1.7e')
-        np.savetxt(file, maxl[i], fmt='%1.7e')
-        np.savetxt(file, maxc[i], fmt='%1.7e')
-        np.savetxt(file, minl[i], fmt='%1.7e')
-        np.savetxt(file, minc[i], fmt='%1.7e')
+    with lock:
+        # print(resultados[0][i])
+        # print(resultados[1][i])
+        # print(resultados[2][0][i])
+        # print(resultados[3][0][i])
+        print(resultados[4][0][0][i])
+        # print(resultados[5][0][i])
+        # print(resultados[6][0][i])
+        # print(resultados[7][0][i])
+        # print(resultados[8][0][i])
+        # with open(arquivos_out, 'w') as file:
+        #     np.savetxt(file, resultados[0][i], fmt='%1.7e')         # ordlin
+        #     np.savetxt(file, resultados[1][i], fmt='%1.7e')         # ordcol
+        #     np.savetxt(file, resultados[2][0][i], fmt='%1.7e')      # somal
+        #     np.savetxt(file, resultados[3][0][i], fmt='%1.7e')      # somac
+        #     np.savetxt(file, resultados[4][0][0][i], fmt='%1.7e')   # total
+        #     np.savetxt(file, resultados[5][0][i], fmt='%1.7e')      # maxl
+        #     np.savetxt(file, resultados[6][0][i], fmt='%1.7e')      # maxc
+        #     np.savetxt(file, resultados[7][0][i], fmt='%1.7e')      # minl
+        #     np.savetxt(file, resultados[8][0][i], fmt='%1.7e')      # minc
 
 def readMulticore():
     global tempos_io
@@ -276,6 +291,8 @@ def readMulticore():
     global nthreads_io
     global nthreads_cpu
     global folder_path_file_in
+    global folder_path_file_out
+    print(folder_path_file_out)
     qtd_arquivos = qtdArquivos(folder_path_file_in)
     matrizes = ordlin = ordcol = somal = somac = total = maxl = maxc = minl = minc = []
     arquivos = arquivos_txt()
@@ -317,20 +334,12 @@ def readMulticore():
 
     # begin escrita de arquivos
     ini_tempo = time.time()
-    pool_w = mp.Pool(nthreads_io)
-    jobs = []
-    for i in range(qtd_arquivos):
-        job = pool_w.apply_async(writeMulticore, (i, 
-            ordlin, ordcol, somal, somac, 
-            total, maxl, maxc, minl, minc))
-        jobs.append(job)
-
-    for job in jobs:
-        job.get()
-    
-    pool_w.close()
-    pool_w.join()
-
+    lock = mp.Lock()
+    processes_w = [mp.Process(target=writeMulticore, args=(lock, i, resultados_c)) for i in range(qtd_arquivos)]
+    for process in processes_w: # começa os processos
+        process.start()
+    for process in processes_w: # espera finalização dos processos
+        process.join()
     end_tempo = time.time()
     print('Tempo total de escrita de arquivos: ',  end_tempo - ini_tempo)
 
