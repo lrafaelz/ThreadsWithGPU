@@ -232,6 +232,15 @@ def arquivos_txt():
         arquivos_txt.append(folder_path_file_in + '/' + str(i) + '.txt')
     return arquivos_txt
 
+def arquivos_txt_out():
+    global folder_path_file_in
+    global folder_path_file_out
+    qtd_arquivos = qtdArquivos(folder_path_file_in)
+    arquivos_txt = []
+    for i in range(1, qtd_arquivos+1):
+        arquivos_txt.append(folder_path_file_out + '/' + str(i) + '.txt')
+    return arquivos_txt
+
 def calculo_matrizes(matrizes):
     ini_time = time.time()
     ordlin = np.sort(matrizes, axis=1)
@@ -256,35 +265,28 @@ def calculo_matrizes(matrizes):
     
     return ordlin, ordcol, somal, somac, total, maxl, maxc, minl, minc, tempo_c
 
-def writeMulticore(i, resultados, queue):
-    global folder_path_file_in
-    global folder_path_file_out
-    print(folder_path_file_in)
-    print(folder_path_file_out)
-    arquivos_out = folder_path_file_out + '/' + str(i+1) + '_out.txt'
-    print(arquivos_out)
-
-        # print(resultados[0][i])
-        # print(resultados[1][i])
-        # print(resultados[2][0][i])
-        # print(resultados[3][0][i])
-        # print(resultados[4][0][0][i])
-        # print(resultados[5][0][i])
-        # print(resultados[6][0][i])
-        # print(resultados[7][0][i])
-        # print(resultados[8][0][i])
-        # with open(arquivos_out, 'w') as file:
-        #     np.savetxt(file, resultados[0][i], fmt='%1.7e')         # ordlin
-        #     np.savetxt(file, resultados[1][i], fmt='%1.7e')         # ordcol
-        #     np.savetxt(file, resultados[2][0][i], fmt='%1.7e')      # somal
-        #     np.savetxt(file, resultados[3][0][i], fmt='%1.7e')      # somac
-        #     np.savetxt(file, resultados[4][0][0][i], fmt='%1.7e')   # total
-        #     np.savetxt(file, resultados[5][0][i], fmt='%1.7e')      # maxl
-        #     np.savetxt(file, resultados[6][0][i], fmt='%1.7e')      # maxc
-        #     np.savetxt(file, resultados[7][0][i], fmt='%1.7e')      # minl
-        #     np.savetxt(file, resultados[8][0][i], fmt='%1.7e')      # minc
-    queue.put(resultados[4][0][0][i])
-    
+def writeMulticore(resultados, arquivos):
+    with open(arquivos, 'w') as file:
+        np.savetxt(file, resultados[0], fmt='%1.7e')
+        np.savetxt(file, resultados[1], fmt='%1.7e')
+        np.savetxt(file, resultados[2][0].reshape(1, 1000), fmt='%1.7e')
+        np.savetxt(file, resultados[3][0].reshape(1, 1000), fmt='%1.7e')
+        np.savetxt(file, resultados[4][0][0].reshape(1, 1), fmt='%1.7e')
+        np.savetxt(file, resultados[5][0].reshape(1, 1000), fmt='%1.7e')
+        np.savetxt(file, resultados[6][0].reshape(1, 1000), fmt='%1.7e')
+        np.savetxt(file, resultados[7][0].reshape(1, 1000), fmt='%1.7e')
+        np.savetxt(file, resultados[8][0].reshape(1, 1000), fmt='%1.7e')
+    # with open(arquivos, 'w') as file:
+    #     np.savetxt(file, resultados[0], fmt='%1.7e')         # ordlin
+    #     np.savetxt(file, resultados[1], fmt='%1.7e')         # ordcol
+    #     np.savetxt(file, resultados[2][0], fmt='%1.7e')      # somal
+    #     np.savetxt(file, resultados[3][0], fmt='%1.7e')      # somac
+    #     np.savetxt(file, resultados[4][0][0], fmt='%1.7e')   # total
+    #     np.savetxt(file, resultados[5][0], fmt='%1.7e')      # maxl
+    #     np.savetxt(file, resultados[6][0], fmt='%1.7e')      # maxc
+    #     np.savetxt(file, resultados[7][0], fmt='%1.7e')      # minl
+    #     np.savetxt(file, resultados[8][0], fmt='%1.7e')      # minc
+    return arquivos
 
 def readMulticore():
     global tempos_io
@@ -296,6 +298,7 @@ def readMulticore():
     qtd_arquivos = qtdArquivos(folder_path_file_in)
     matrizes = ordlin = ordcol = somal = somac = total = maxl = maxc = minl = minc = []
     arquivos = arquivos_txt()
+    arquivos_out = arquivos_txt_out()
 
     # begin leitura de arquivos
     ini_tempo = time.time()
@@ -320,33 +323,26 @@ def readMulticore():
     print('Tempo total de cálculos de matrizes: ',  end_tempo - ini_tempo)
 
     # 0 ordlin, 1 ordcol, 2 somal, 3 somac, 4 total, 5 maxl, 6 maxc, 7 minl, 8 minc, 9 tempo_c
-    for resultado in resultados_c:
-        ordlin.append(resultado[0])
-        ordcol.append(resultado[1])
-        somal.append(resultado[2][0])
-        somac.append(resultado[3][0])
-        total.append(resultado[4][0][0])
-        maxl.append(resultado[5][0])
-        maxc.append(resultado[6][0])
-        minl.append(resultado[7][0])
-        minc.append(resultado[8][0])
-        tempos_cpu.append(resultado[9])
+    # for resultado in resultados_c:
+    #     ordlin.append(resultado[0])
+    #     ordcol.append(resultado[1])
+    #     somal.append(resultado[2][0])
+    #     somac.append(resultado[3][0])
+    #     total.append(resultado[4][0][0])
+    #     maxl.append(resultado[5][0])
+    #     maxc.append(resultado[6][0])
+    #     minl.append(resultado[7][0])
+    #     minc.append(resultado[8][0])
+    #     tempos_cpu.append(resultado[9])
 
     # begin escrita de arquivos
     ini_tempo = time.time()
-    queue = mp.Queue()
-    processes = [mp.Process(target=writeMulticore, args=(i, resultados_c, queue)) for i in range(qtd_arquivos)]
-    for process in processes:
-        process.start()
-    for process in processes:
-        process.join()
-    results = [queue.get() for _ in range(qtd_arquivos)]
-    results.sort(key=lambda value: value[1])
-    for result in results:
-        print(f'> {result}')
+    with mp.Pool(processes=nthreads_cpu) as pool_w:
+        resultados_w = pool_w.starmap(writeMulticore, zip(resultados_c, arquivos_out))
     end_tempo = time.time()
     print('Tempo total de escrita de arquivos: ',  end_tempo - ini_tempo)
 
+    print(resultados_w)
 
 
 if __name__ == "__main__":
