@@ -24,7 +24,8 @@ folder_path_file_out = ''
 nthreads_io = 0
 nthreads_cpu = 0
 nthreads_local = mp.cpu_count()
-tempos_io = []
+tempos_i = []
+tempos_o = []
 tempos_cpu = []
 
 class Ui_MainWindow(object):
@@ -189,10 +190,12 @@ class Ui_MainWindow(object):
             self.msg_warning_exe()
         else:
             # self.label_graph_io.setText("label_threads_io")
-            global tempos_io
+            global tempos_i
+            global tempos_o
             qtd_arquivos = qtdArquivos(folder_path_file_in)
             x_plot = range(1, qtd_arquivos+1)
-            plt.plot(x_plot, tempos_io, label='Arquivos')
+            plt.plot(x_plot, tempos_i, label='Leitura')
+            plt.plot(x_plot, tempos_o, label='Escrita')
             plt.title('Gráfico de tempo de leitura de cada arquivo')
             plt.xlabel('arquivos')
             plt.ylabel('tempo (s)')
@@ -207,7 +210,7 @@ class Ui_MainWindow(object):
             global tempos_cpu
             qtd_arquivos = qtdArquivos(folder_path_file_in)
             x_plot = range(1, qtd_arquivos+1)
-            plt.plot(x_plot, tempos_cpu, label='Arquivos')
+            plt.plot(x_plot, tempos_cpu, label='Cálculos')
             plt.title('Gráfico de tempo de operações de cada arquivo')
             plt.xlabel('arquivos')
             plt.ylabel('tempo (s)')
@@ -266,6 +269,7 @@ def calculo_matrizes(matrizes):
     return ordlin, ordcol, somal, somac, total, maxl, maxc, minl, minc, tempo_c
 
 def writeMulticore(resultados, arquivos):
+    ini_time = time.time()
     with open(arquivos, 'w') as file:
         np.savetxt(file, resultados[0], fmt='%1.7e')
         np.savetxt(file, resultados[1], fmt='%1.7e')
@@ -276,6 +280,7 @@ def writeMulticore(resultados, arquivos):
         np.savetxt(file, resultados[6][0].reshape(1, 1000), fmt='%1.7e')
         np.savetxt(file, resultados[7][0].reshape(1, 1000), fmt='%1.7e')
         np.savetxt(file, resultados[8][0].reshape(1, 1000), fmt='%1.7e')
+    end_time = time.time()
     # with open(arquivos, 'w') as file:
     #     np.savetxt(file, resultados[0], fmt='%1.7e')         # ordlin
     #     np.savetxt(file, resultados[1], fmt='%1.7e')         # ordcol
@@ -286,10 +291,12 @@ def writeMulticore(resultados, arquivos):
     #     np.savetxt(file, resultados[6][0], fmt='%1.7e')      # maxc
     #     np.savetxt(file, resultados[7][0], fmt='%1.7e')      # minl
     #     np.savetxt(file, resultados[8][0], fmt='%1.7e')      # minc
-    return arquivos
+    tempo_w = end_time - ini_time
+    return tempo_w
 
 def readMulticore():
-    global tempos_io
+    global tempos_i
+    global tempos_o
     global tempos_cpu
     global nthreads_io
     global nthreads_cpu
@@ -310,7 +317,7 @@ def readMulticore():
     print('Tempo total de leitura de arquivos: ',  end_tempo - ini_tempo)
 
     for resultado in resultados_r: # resultado[0] == matrizes, resultado[1] == tempo_leitura
-        tempos_io.append(resultado[1])
+        tempos_i.append(resultado[1])
         matrizes.append(resultado[0])
     
     # begin calculos de matrizes
@@ -323,17 +330,17 @@ def readMulticore():
     print('Tempo total de cálculos de matrizes: ',  end_tempo - ini_tempo)
 
     # 0 ordlin, 1 ordcol, 2 somal, 3 somac, 4 total, 5 maxl, 6 maxc, 7 minl, 8 minc, 9 tempo_c
-    # for resultado in resultados_c:
-    #     ordlin.append(resultado[0])
-    #     ordcol.append(resultado[1])
-    #     somal.append(resultado[2][0])
-    #     somac.append(resultado[3][0])
-    #     total.append(resultado[4][0][0])
-    #     maxl.append(resultado[5][0])
-    #     maxc.append(resultado[6][0])
-    #     minl.append(resultado[7][0])
-    #     minc.append(resultado[8][0])
-    #     tempos_cpu.append(resultado[9])
+    for resultado in resultados_c:
+        # ordlin.append(resultado[0])
+        # ordcol.append(resultado[1])
+        # somal.append(resultado[2][0])
+        # somac.append(resultado[3][0])
+        # total.append(resultado[4][0][0])
+        # maxl.append(resultado[5][0])
+        # maxc.append(resultado[6][0])
+        # minl.append(resultado[7][0])
+        # minc.append(resultado[8][0])
+        tempos_cpu.append(resultado[9])
 
     # begin escrita de arquivos
     ini_tempo = time.time()
@@ -341,8 +348,9 @@ def readMulticore():
         resultados_w = pool_w.starmap(writeMulticore, zip(resultados_c, arquivos_out))
     end_tempo = time.time()
     print('Tempo total de escrita de arquivos: ',  end_tempo - ini_tempo)
-
-    print(resultados_w)
+    # print(resultados_w)
+    for resultado in resultados_w:
+        tempos_o.append(resultado)
 
 
 if __name__ == "__main__":
