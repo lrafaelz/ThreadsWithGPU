@@ -197,7 +197,7 @@ class Ui_MainWindow(object):
             plt.plot(x_plot, tempos_i, label='Leitura')
             plt.plot(x_plot, tempos_o, label='Escrita')
             plt.plot(x_plot, mediaTempoS(tempos_i, tempos_o), label='Tempo médio L/E')
-            plt.title('Gráfico de tempo de leitura de cada arquivo')
+            plt.title('Gráfico de tempo de leitura/escrita de cada arquivo')
             plt.xlabel('arquivos')
             plt.ylabel('tempo (s)')
             plt.legend()
@@ -258,7 +258,7 @@ def arquivos_txt_out():
     qtd_arquivos = qtdArquivos(folder_path_file_in)
     arquivos_txt = []
     for i in range(1, qtd_arquivos+1):
-        arquivos_txt.append(folder_path_file_out + '/' + str(i) + '.txt')
+        arquivos_txt.append(folder_path_file_out + '/' + str(i) + '_out.txt')
     return arquivos_txt
 
 def calculo_matrizes(matrizes):
